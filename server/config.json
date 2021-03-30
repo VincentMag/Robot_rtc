@@ -1,0 +1,16 @@
+{
+    "serveur" : "localhost",
+    "serveur2" : "172.18.1.6",
+    "serveur3" : "vps662945.ovh.net",
+
+    "port_web" : 9000,
+    "port_ws" : 9100,
+
+    "dossier_static" : "./",
+    "url_static" : "/",
+
+    "arret_serveur_ws" : 1200000,
+    "arret_serveur_web" : 1200000
+}
+
+

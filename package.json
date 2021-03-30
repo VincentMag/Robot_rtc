@@ -1,0 +1,15 @@
+{
+  "name": "robot_rtc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Tomkimsour <tomkimsour@hotmail.fr>",
+  "license": "MIT",
+  "scripts":{
+    "start": "node serveur_web.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "ws": "^7.4.4"
+  }
+}

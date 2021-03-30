@@ -1,0 +1,210 @@
+<!doctype html">
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Robot</title>
+    
+    <script type="text/javascript">
+
+        var config = null   // configuration (fichier config.json)
+        var ws = null       // client HTML ws
+        var txt = null      // zone d'affichage
+
+        function init() {
+
+            console.log("message = "+JSON.stringify(message("zzz","rr","tt")))
+            getconfig()
+
+            var bouton_startwss = document.getElementById("startwss")
+            bouton_startwss.addEventListener('click', function () {
+                startwss()
+            })
+
+            var bouton_stopwss = document.getElementById("stopwss")
+            bouton_stopwss.addEventListener('click', function () {
+                stopwss()
+            })
+
+            var bouton_startws = document.getElementById("startws")
+            bouton_startws.addEventListener('click', function () {
+                startws()
+            })
+
+            var bouton_stopws = document.getElementById("stopws")
+            bouton_stopws.addEventListener('click', function () {
+                stopws()
+            })
+
+            var bouton_info = document.getElementById("info")
+            bouton_info.addEventListener('click', function () {
+                info({ type: "ws" })
+            })
+
+            var bouton_robot_avancer = document.getElementById("robot_avancer")
+            bouton_robot_avancer.addEventListener('click', function () {
+                robot_avancer()
+            })
+
+            txt = document.getElementById("txt")
+
+        }
+
+        // chargement de la configuration (fichier config.json)
+        function getconfig() {
+            var req = new XMLHttpRequest()
+            req.overrideMimeType("application/json")
+            req.open('GET', "getconfig", true)
+            req.onload = function () {
+                config = JSON.parse(req.responseText)
+                console.log(JSON.stringify(config))
+            }
+            req.send(null)
+        }
+
+        // démarrage du serveur ws
+        function startwss() {
+            var req = new XMLHttpRequest()
+            req.overrideMimeType("application/json")
+            req.open('GET', "startwss", true)
+            req.onload = function () {
+                var res = JSON.parse(req.responseText)
+                print(res.mess)
+            }
+            req.send(null)
+        }
+
+        // arrêt du serveur ws
+        function stopwss() {
+            var req = new XMLHttpRequest()
+            req.overrideMimeType("application/json")
+            req.open('GET', "stopwss", true)
+            req.onload = function () {
+                var res = JSON.parse(req.responseText)
+                print(res.mess)
+            }
+            req.send(null)
+        }
+
+        // démarrage du client HTML ws
+        function startws() {
+            ws = new WebSocket("ws://" + config.serveur + ":" + config.port_ws)
+
+            ws.onopen = function (e) {
+                print("connexion websocket établie")
+                var mess = {
+                    txt: "Nouveau client HTML WS",
+                    date: Date.now(),
+                }
+                ws.send(JSON.stringify(mess))
+            }
+
+            ws.onclose = function (e) {
+                print("Arrêt du client HTML WS")
+                ws = null
+            }
+
+            // réception de prints
+            ws.onmessage = function (event) {
+                print("message reçu : " + event.data)
+                // Si le message reçu est du JSON, décoder en utilisant JSON.parse
+                // var m = JSON.parse(event.data)
+            }
+
+        }
+
+        // démarrage du client HTML ws
+        function stopws() {
+            ws.close();
+        }
+
+        // info wss
+        function info(cmd) {
+            const json = {
+                email: 'hi@attacomsian.com',
+                password: '123abc'
+            };
+
+            // request options
+            const options = {
+                method: 'POST',
+                body: JSON.stringify(json),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            // send post request
+            // fetch('/info', options)
+            // .then(res => console.log("mess = "+res.mess))
+
+            fetch('/info', options)
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    console.log(res.mess)
+                })
+                .catch(err => console.error(err));
+
+            // var req = new XMLHttpRequest()
+            // req.open('POST', "info")
+            // req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            // req.onload = function () {
+            //     var res = JSON.parse(req.responseText)
+            //     print(res.mess)
+            // }
+            // req.send("par=ee")
+        }
+
+        function robot_avancer() {
+            // test serveur ws lancé pas fait !!!!
+            print("robot_avancer")
+            var mess = message("ihm","robot","avancer")
+            ws.send(JSON.stringify(mess))
+        }
+
+        function message(srce,dest,cmd,arg) {
+            if(typeof arg === 'undefined') arg = ""
+            var bloc = {
+                srce : srce,
+                dest : dest,
+                cmd : cmd,
+                arg : arg,
+                time : new Date().getTime()
+            }
+        return bloc;
+        }
+
+        function print(m) {
+            console.log(m)
+            txt.value = txt.value + m + "\n"
+        }
+
+    </script>
+
+</head>
+
+<body onload="init()">
+
+    <button id="startwss" type="button">Démarrer serveur WS</button>
+    <br>
+    <button id="stopwss" type="button">Arrêter serveur WS</button>
+    <br>
+    <button id="startws" type="button">Démarrer client WS</button>
+    <br>
+    <button id="stopws" type="button">Arrêter client WS</button>
+    <br>
+    <button id="info" type="button">Info</button>
+    <br>
+    <br>
+    <button id="robot_avancer" type="button">Avancer</button>
+    <br>
+    <br>
+    <textarea id="txt" cols="80" rows="20"></textarea>
+
+
+
+
+</body>
+
+</html>
