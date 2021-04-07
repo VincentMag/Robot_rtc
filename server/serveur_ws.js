@@ -7,7 +7,7 @@
 // npm install ws
 // nano serveurws.js
 
-var config = require('./config.js').config
+var config = require('../config.js').config
 var WebSocket = require('ws')
 
 

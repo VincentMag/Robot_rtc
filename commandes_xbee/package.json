@@ -1,0 +1,10 @@
+{
+  "name": "commandes_xbee",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "replaceall": "^0.1.6",
+    "serialport": "^9.0.7"
+  }
+}

@@ -1,10 +1,9 @@
-
 var express = require('express') // serveur Web
 var bodyParser = require('body-parser')
 
 var serveur_ws = require("./server/serveur_ws.js")
 
-var config = require('./server/config.js').config
+var config = require('./config.js').config
 
 
 var app = express()

@@ -1,7 +1,7 @@
 
 var WebSocket = require('ws')
 var config = require('./config.js').config
-var message = require("./message.js").message
+var message = require("./client/message.js").message
 
 var ws = new WebSocket('ws://'+config.serveur+':' + config.port_ws)
 
@@ -23,7 +23,6 @@ ws.on('close', () => {
 
 // réception de messages
 ws.on('message', function incoming(data) {
-	console.log("Message du serveur WS " + data);
+	console.log("Message du serveur WS " + data)
+	console.log(JSON.parse(data))
 });
-
-
